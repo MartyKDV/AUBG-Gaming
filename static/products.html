@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>
+            Products
+        </title>
+
+        <style>
+            .item{
+                width: 120px;
+                height: 160px;
+                background-color: aqua;
+                margin: auto;
+                margin-right: 50px;
+                float: left;
+            }
+        </style>
+    </head>
+    <body style="text-align: center;">
+
+            <h2>Products</h2>
+            <a href="/"> Homepage </a>
+            <div style="margin-top: 50px;">
+                <div style="display: inline-block;">
+                    {{range $k := .}}
+                    <p class="item">
+                         {{$k.Id}}              <br>
+                         {{$k.Name}}            <br>
+                         {{$k.Category}}        <br>
+                         {{$k.Price}}           <br>
+                         {{$k.Discount}}        <br>
+                         {{$k.Genre}}           <br>
+                         {{$k.ReleaseDate}}     <br>
+                    </p>
+                    {{end}}
+                </div>
+            </div>           
+            
+    </body>
+</html>
