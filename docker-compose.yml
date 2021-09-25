@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+
+  aubg-gaming:
+    image: martykdv/aubg-gaming:latest
+    ports:
+      - 8080:8080
+    container_name: aubg-gaming-v1
+
+  mysql-db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      - 3307:3306
+    volumes:
+      - mysqldata:/var/lib/mysql
+    container_name: mysql-db
+
+volumes:
+  mysqldata:
