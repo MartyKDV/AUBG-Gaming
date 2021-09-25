@@ -7,6 +7,8 @@ services:
     ports:
       - 8080:8080
     container_name: aubg-gaming-v1
+    depends_on:
+      - mysql-db
 
   mysql-db:
     image: mysql:latest
