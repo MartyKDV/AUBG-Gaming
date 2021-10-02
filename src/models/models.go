@@ -1,5 +1,11 @@
 package models
 
+import "database/sql"
+
+func getDiscountedPrice(p Product) float64 {
+	return p.Price - (p.Discount * p.Price)
+}
+
 type Product struct {
 	Id              int
 	Name            string
@@ -8,23 +14,29 @@ type Product struct {
 	Discount        float64
 }
 
-type Game struct {
-	Genre       string
-	ReleaseDate string
+type Collection struct {
+	Games    []Game
+	Hardware []Hardware
+	Services []Service
+}
+
+type Item struct {
 	Product
+	Game
+	Hardware
+	Category string
+}
+
+type Game struct {
+	Genre       sql.NullString
+	ReleaseDate sql.NullString
 }
 
 type Hardware struct {
-	Features []string
-	Product
+	Features sql.NullString
 }
 
 type Service struct {
-	ServiceType  string
-	DeliveryType string
-	Product
-}
-
-func getDiscountedPrice(p Product) float64 {
-	return p.Discount * p.Price
+	ServiceType  sql.NullString
+	DeliveryType sql.NullString
 }

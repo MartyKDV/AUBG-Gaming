@@ -4,9 +4,9 @@ import "net/http"
 
 func (server *Server) initialiseRoutes() {
 
-	fileServer := http.FileServer(http.Dir("../static"))
+	fileServer := http.FileServer(http.Dir("./static"))
 
 	server.Router.Handle("/", fileServer)
-	server.Router.HandleFunc("/products", server.handleProducts)
-	server.Router.HandleFunc("/products/{id}", server.handleProductsID)
+	server.Router.HandleFunc("/products", server.handleProducts).Methods("GET")
+	server.Router.HandleFunc("/product/{id}", server.handleProductID).Methods("GET")
 }

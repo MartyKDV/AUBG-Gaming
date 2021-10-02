@@ -3,7 +3,7 @@ version: '3'
 services:
 
   aubg-gaming:
-    image: martykdv/aubg-gaming:latest
+    image: martykdv/aubg-gaming:test
     ports:
       - 8080:8080
     container_name: aubg-gaming-v1
@@ -22,6 +22,15 @@ services:
     volumes:
       - mysqldata:/var/lib/mysql
     container_name: mysql-db
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - 8081:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_PASSWORD=${DB_PASSWORD}
+    container_name: phpmyadmin
 
 volumes:
   mysqldata:
