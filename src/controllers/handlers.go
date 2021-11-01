@@ -37,6 +37,7 @@ func createJWT(user string) (string, error) {
 func (server *Server) handleCartUpdate(w http.ResponseWriter, r *http.Request) {
 
 	quantity := r.FormValue("quantity")
+	log.Println("-------------" + quantity + "------------------")
 	quantityInt, err := strconv.Atoi(quantity)
 	checkError(err)
 	vars := mux.Vars(r)
