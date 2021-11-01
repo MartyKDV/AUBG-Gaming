@@ -58,8 +58,9 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 				idString := strconv.Itoa(i.ItemID)
 				result := server.Db.QueryRow("SELECT id, name FROM products WHERE id = " + idString)
 				var cartItem models.CartItemDetails
-				err := result.Scan(&cartItem.ID, &cartItem.Name, &cartItem.Quantity)
+				err := result.Scan(&cartItem.ID, &cartItem.Name)
 				checkError(err)
+				cartItem.Quantity = i.Quantity
 				cartItems = append(cartItems, cartItem)
 			}
 
@@ -85,7 +86,7 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 			cart.CartItems = append(cart.CartItems, cartItem)
 
 			log.Println("Added: " + string(cartItem.ItemID))
-			http.Redirect(w, r, "/cart", http.StatusAccepted)
+			http.Redirect(w, r, "localhost:8080/cart", http.StatusAccepted)
 		}
 	case "UPDATE":
 		{
