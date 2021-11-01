@@ -19,10 +19,10 @@ type Server struct {
 func (server *Server) UpdateQuantity(user string, itemID int, quantity int) {
 
 	cart := server.CartSessions[user]
-	for _, v := range cart.CartItems {
+	for k, v := range cart.CartItems {
 
 		if v.ItemID == itemID {
-			v.Quantity = quantity
+			cart.CartItems[k].Quantity = quantity
 			server.CartSessions[user] = cart
 			return
 		}
