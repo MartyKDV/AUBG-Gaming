@@ -48,6 +48,7 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 			checkError(err)
 
 			user := cookie.Value
+			log.Println("Got: " + user)
 			cart := server.GetCart(user)
 
 			var cartItems []models.CartItemDetails
@@ -60,7 +61,6 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 				checkError(err)
 				cartItems = append(cartItems, cartItem)
 			}
-			log.Println("Got: " + cartItems[0].Name)
 
 			err = templ.Execute(w, cartItems)
 			checkError(err)
