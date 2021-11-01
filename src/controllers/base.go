@@ -11,35 +11,26 @@ import (
 )
 
 type Server struct {
-	Db          *sql.DB
-	Router      *mux.Router
-	sessionBase []Session
+	Db           *sql.DB
+	Router       *mux.Router
+	CartSessions map[string]models.Cart
 }
 
-type Session struct {
-	User string
-	Cart models.Cart
-}
+func (server *Server) GetCart(user string) models.Cart {
 
-func (server *Server) GetCart(user string) *models.Cart {
-
-	for _, s := range server.sessionBase {
-		if user == s.User {
-			return &s.Cart
-		}
+	if _, exists := server.CartSessions[user]; exists {
+		return server.CartSessions[user]
+	} else {
+		server.CartSessions[user] = models.Cart{}
+		return server.CartSessions[user]
 	}
-	session := new(Session)
-	server.sessionBase = append(server.sessionBase, *session)
-	return &session.Cart
 }
 
 func (server *Server) UpdateCart(user string, cartItem models.CartItem) {
 
-	for _, s := range server.sessionBase {
-		if user == s.User {
-			s.Cart.CartItems = append(s.Cart.CartItems, cartItem)
-		}
-	}
+	cart := server.CartSessions[user]
+	cart.CartItems = append(cart.CartItems, cartItem)
+	server.CartSessions[user] = cart
 }
 
 func (server *Server) Initialise(dns string) {
@@ -49,7 +40,7 @@ func (server *Server) Initialise(dns string) {
 	checkError(err)
 
 	server.Router = mux.NewRouter()
-	server.sessionBase = []Session{{User: "mbk180@aubg.edu", Cart: models.Cart{CartItems: []models.CartItem{{ItemID: 1, Quantity: 1}, {ItemID: 2, Quantity: 1}}}}}
+	server.CartSessions["mbk180@aubg.edu"] = models.Cart{CartItems: []models.CartItem{{ItemID: 1, Quantity: 1}}}
 
 	server.initialiseRoutes()
 
