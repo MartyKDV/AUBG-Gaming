@@ -40,6 +40,7 @@ func (server *Server) Initialise(dns string) {
 	checkError(err)
 
 	server.Router = mux.NewRouter()
+	server.CartSessions = make(map[string]models.Cart)
 
 	server.initialiseRoutes()
 
