@@ -34,7 +34,24 @@ func createJWT(user string) (string, error) {
 
 	return tokenString, nil
 }
+func (server *Server) handleCartUpdate(w http.ResponseWriter, r *http.Request) {
 
+	quantity := r.FormValue("quantity")
+	quantityInt, err := strconv.Atoi(quantity)
+	checkError(err)
+	vars := mux.Vars(r)
+	id := vars["id"]
+	intID, err := strconv.Atoi(id)
+	checkError(err)
+	cookie, err := r.Cookie("cartCookie")
+	checkError(err)
+	user := cookie.Value
+
+	server.UpdateQuantity(user, intID, quantityInt)
+
+	http.Redirect(w, r, "/cart", http.StatusSeeOther)
+	return
+}
 func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {

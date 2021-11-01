@@ -46,7 +46,8 @@
                 {{range $k := .}}
                 <tr>
                     <td> {{$k.Name}}       </td>
-                    <td> {{$k.Quantity}}   </td>
+                    <td><form method="post" action="/cart/quantity"><input type="number" min="1" name="quantity" value="{{$k.Quantity}}"></td>
+                    <td><input type="submit" value="Edit"></form>></td>
                 </tr>
                 {{end}}
             </table>
