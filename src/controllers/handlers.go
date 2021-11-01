@@ -81,10 +81,9 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 
 			user := cookie.Value
 			log.Println("Got: " + user)
-			cart := server.GetCart(user)
 
 			cartItem := models.CartItem{ItemID: intID, Quantity: 1}
-			cart.CartItems = append(cart.CartItems, cartItem)
+			server.UpdateCart(user, cartItem)
 
 			templ, err := template.ParseFiles("./views/status.html")
 			checkError(err)

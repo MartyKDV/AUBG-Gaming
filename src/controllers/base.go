@@ -33,6 +33,15 @@ func (server *Server) GetCart(user string) *models.Cart {
 	return &session.Cart
 }
 
+func (server *Server) UpdateCart(user string, cartItem models.CartItem) {
+
+	for _, s := range server.sessionBase {
+		if user == s.User {
+			s.Cart.CartItems = append(s.Cart.CartItems, cartItem)
+		}
+	}
+}
+
 func (server *Server) Initialise(dns string) {
 
 	var err error
