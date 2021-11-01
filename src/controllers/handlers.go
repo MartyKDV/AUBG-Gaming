@@ -80,6 +80,7 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 			checkError(err)
 
 			user := cookie.Value
+			log.Println("Got: " + user)
 			cart := server.GetCart(user)
 
 			cartItem := models.CartItem{ItemID: intID, Quantity: 1}
