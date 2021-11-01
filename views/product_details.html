@@ -19,10 +19,19 @@
 
         <div class="navbar">
             <div class="nav_option">
-                <a href="/">            Homepage </a>
+                <a href="/">            Homepage    </a>
             </div>
             <div class="nav_option">
-                <a href="/products">    Products </a>
+                <a href="/products">    Products    </a>
+            </div>
+            <div class="nav_option">
+                <a href="/login">       Login       </a>
+            </div>
+            <div class="nav_option">
+                <a href="/register">    Register    </a>
+            </div>
+            <div class="nav_option">
+                <a href="/cart">        Cart        </a>
             </div>
         </div>
 
@@ -41,6 +50,10 @@
                     {{if (eq $k.Category "hardware")}}
                         Features: {{$k.Features.String}}            <br>
                     {{end}} 
+
+                    <form method="post" action="/cart/{{$k.Id}}">
+                        <input type="submit" value="Add to Cart">   <br>
+                    </form>
                 </p>
             </div>
         </div>     

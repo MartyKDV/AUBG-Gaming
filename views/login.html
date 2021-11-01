@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <title>
+            Login
+        </title>
+        <link rel="stylesheet" href="navbar_style.css">
+        <style>
+            .loginForm{
+                width: 10%;
+                height: 25%;
+                margin: auto;
+                margin-top: 100px;
+                text-align: left;
+            }
+        </style>
+    </head>
+    <body style="text-align: center;">
+
+        <h2> AUBG Gaming </h2>
+
+        <div class="navbar">
+            <div class="nav_option">
+                <a href="/">            Homepage    </a>
+            </div>
+            <div class="nav_option">
+                <a href="/products">    Products    </a>
+            </div>
+            <div class="nav_option">
+                <a href="/login">       Login       </a>
+            </div>
+            <div class="nav_option">
+                <a href="/register">    Register    </a>
+            </div>
+            <div class="nav_option">
+                <a href="/cart">        Cart        </a>
+            </div>
+        </div>
+
+        <div class="loginForm">
+            <form method="POST" action="/login">
+                <label for="user" style="text-align: left;"> Email: </label>            <br>
+                <input type="text" name="user">                                         <br>
+                <label for="password" style="text-align: left;"> Password: </label>     <br>
+                <input type="password" name="password">                                 <br><br>
+                <input type="submit" value="Login">                                     <br>
+            </form>
+        </div>
+            
+    </body>
+</html>

@@ -3,6 +3,7 @@ package controllers
 import (
 	"database/sql"
 	"log"
+	"main/src/models"
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -10,8 +11,26 @@ import (
 )
 
 type Server struct {
-	Db     *sql.DB
-	Router *mux.Router
+	Db          *sql.DB
+	Router      *mux.Router
+	sessionBase []Session
+}
+
+type Session struct {
+	User string
+	Cart models.Cart
+}
+
+func (server *Server) GetCart(user string) models.Cart {
+
+	for _, s := range server.sessionBase {
+		if user == s.User {
+			return s.Cart
+		}
+	}
+	session := new(Session)
+	server.sessionBase = append(server.sessionBase, *session)
+	return session.Cart
 }
 
 func (server *Server) Initialise(dns string) {

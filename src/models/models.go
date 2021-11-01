@@ -37,6 +37,20 @@ type Hardware struct {
 }
 
 type Service struct {
-	ServiceType  sql.NullString
-	DeliveryType sql.NullString
+	ServiceType sql.NullString
+}
+
+type Cart struct {
+	CartItems []CartItem
+}
+
+type CartItem struct {
+	ItemID   int
+	Quantity int
+}
+
+type CartItemDetails struct {
+	ID       int
+	Name     string
+	Quantity int
 }
