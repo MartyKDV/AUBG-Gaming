@@ -45,8 +45,8 @@
                 </tr>
                 {{range $k := .}}
                 <tr>
-                    <td> $k.Name       </td>
-                    <td> $k.Quantity   </td>
+                    <td> {{$k.Name}}       </td>
+                    <td> {{$k.Quantity}}   </td>
                 </tr>
                 {{end}}
             </table>

@@ -85,8 +85,11 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 			cartItem := models.CartItem{ItemID: intID, Quantity: 1}
 			cart.CartItems = append(cart.CartItems, cartItem)
 
-			log.Println("Added: " + string(cartItem.ItemID))
-			http.Redirect(w, r, "localhost:8080/cart", http.StatusAccepted)
+			templ, err := template.ParseFiles("./views/status.html")
+			checkError(err)
+
+			err = templ.Execute(w, "Added an Item to cart!")
+			checkError(err)
 		}
 	case "UPDATE":
 		{
