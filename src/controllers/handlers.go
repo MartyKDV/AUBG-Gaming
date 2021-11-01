@@ -54,12 +54,13 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 
 			for _, i := range cart.CartItems {
 
-				result := server.Db.QueryRow("SELECT id, name FROM products WHERE id = " + string(i.ItemID))
+				result := server.Db.QueryRow("SELECT id, name FROM products WHERE id = " + string(rune(i.ItemID)))
 				var cartItem models.CartItemDetails
 				err := result.Scan(&cartItem.ID, &cartItem.Name, &cartItem.Quantity)
 				checkError(err)
 				cartItems = append(cartItems, cartItem)
 			}
+			log.Println("Got: " + cartItems[0].Name)
 
 			err = templ.Execute(w, cartItems)
 			checkError(err)
@@ -82,7 +83,7 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 			cartItem := models.CartItem{ItemID: intID, Quantity: 1}
 			cart.CartItems = append(cart.CartItems, cartItem)
 
-			fmt.Fprintf(w, "Added: "+string(cartItem.ItemID))
+			fmt.Fprintf(w, "Added: "+string(rune(cartItem.ItemID)))
 		}
 	case "UPDATE":
 		{
