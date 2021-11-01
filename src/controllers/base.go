@@ -16,6 +16,18 @@ type Server struct {
 	CartSessions map[string]models.Cart
 }
 
+func (server *Server) DeleteCartItem(user string, itemID int) {
+
+	cart := server.CartSessions[user]
+	for k, v := range cart.CartItems {
+
+		if v.ItemID == itemID {
+			cart.CartItems = append(cart.CartItems[:k], cart.CartItems[k+1:]...)
+			server.CartSessions[user] = cart
+			return
+		}
+	}
+}
 func (server *Server) UpdateQuantity(user string, itemID int, quantity int) {
 
 	cart := server.CartSessions[user]

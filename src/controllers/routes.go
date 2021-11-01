@@ -14,4 +14,5 @@ func (server *Server) initialiseRoutes() {
 	server.Router.Handle("/cart", server.isLogged(server.handleCart)).Methods("GET")
 	server.Router.Handle("/cart/{id}", server.isLogged(server.handleCart)).Methods("POST")
 	server.Router.Handle("/cart/quantity/{id}", server.isLogged(server.handleCartUpdate)).Methods("POST")
+	server.Router.Handle("/cart/delete/{id}", server.isLogged(server.handleCartDelete)).Methods("POST")
 }
