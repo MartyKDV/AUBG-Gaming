@@ -11,5 +11,6 @@ func (server *Server) initialiseRoutes() {
 	server.Router.Handle("/product/{id}", server.isLogged(server.handleProductID)).Methods("GET")
 	server.Router.HandleFunc("/register", server.handleRegister)
 	server.Router.HandleFunc("/login", server.handleLogin)
-	server.Router.Handle("/cart", server.isLogged(server.handleCart))
+	server.Router.Handle("/cart", server.isLogged(server.handleCart)).Methods("GET")
+	server.Router.Handle("/cart/{id}", server.isLogged(server.handleCart)).Methods("POST")
 }

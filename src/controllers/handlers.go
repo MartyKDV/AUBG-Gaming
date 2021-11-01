@@ -6,6 +6,7 @@ import (
 	"main/src/models"
 	"net/http"
 	"os"
+	"strconv"
 	"text/template"
 	"time"
 
@@ -64,6 +65,25 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 			checkError(err)
 		}
 
+	case "POST":
+		{
+			// Add item to cart
+			vars := mux.Vars(r)
+			id := vars["id"]
+			intID, err := strconv.Atoi(id)
+			checkError(err)
+
+			cookie, err := r.Cookie("loginCookie")
+			checkError(err)
+
+			user := cookie.Value
+			cart := server.GetCart(user)
+
+			cartItem := models.CartItem{ItemID: intID, Quantity: 1}
+			cart.CartItems = append(cart.CartItems, cartItem)
+
+			http.Redirect(w, r, "/cart", http.StatusAccepted)
+		}
 	case "UPDATE":
 		{
 			//EditQuantityItem()

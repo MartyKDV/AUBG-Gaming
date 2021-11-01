@@ -3,7 +3,7 @@ version: '3'
 services:
 
   aubg-gaming:
-    image: martykdv/aubg-gaming:test
+    image: martykdv/aubg-gaming:latest
     ports:
       - 8080:8080
     container_name: aubg-gaming-v1
