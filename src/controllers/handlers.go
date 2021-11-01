@@ -55,7 +55,8 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 
 			for _, i := range cart.CartItems {
 
-				result := server.Db.QueryRow("SELECT id, name FROM products WHERE id = " + string(rune(i.ItemID)))
+				idString := strconv.Itoa(i.ItemID)
+				result := server.Db.QueryRow("SELECT id, name FROM products WHERE id = " + idString)
 				var cartItem models.CartItemDetails
 				err := result.Scan(&cartItem.ID, &cartItem.Name, &cartItem.Quantity)
 				checkError(err)
@@ -74,7 +75,7 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 			intID, err := strconv.Atoi(id)
 			checkError(err)
 
-			cookie, err := r.Cookie("loginCookie")
+			cookie, err := r.Cookie("cartCookie")
 			checkError(err)
 
 			user := cookie.Value
@@ -83,7 +84,8 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 			cartItem := models.CartItem{ItemID: intID, Quantity: 1}
 			cart.CartItems = append(cart.CartItems, cartItem)
 
-			fmt.Fprintf(w, "Added: "+string(rune(cartItem.ItemID)))
+			log.Println("Added: " + string(cartItem.ItemID))
+			http.Redirect(w, r, "/cart", http.StatusAccepted)
 		}
 	case "UPDATE":
 		{
