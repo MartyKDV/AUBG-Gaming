@@ -21,16 +21,16 @@ type Session struct {
 	Cart models.Cart
 }
 
-func (server *Server) GetCart(user string) models.Cart {
+func (server *Server) GetCart(user string) *models.Cart {
 
 	for _, s := range server.sessionBase {
 		if user == s.User {
-			return s.Cart
+			return &s.Cart
 		}
 	}
 	session := new(Session)
 	server.sessionBase = append(server.sessionBase, *session)
-	return session.Cart
+	return &session.Cart
 }
 
 func (server *Server) Initialise(dns string) {
@@ -40,6 +40,7 @@ func (server *Server) Initialise(dns string) {
 	checkError(err)
 
 	server.Router = mux.NewRouter()
+	server.sessionBase = []Session{}
 
 	server.initialiseRoutes()
 

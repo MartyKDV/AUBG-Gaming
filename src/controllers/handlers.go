@@ -82,7 +82,7 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 			cartItem := models.CartItem{ItemID: intID, Quantity: 1}
 			cart.CartItems = append(cart.CartItems, cartItem)
 
-			http.Redirect(w, r, "/cart", http.StatusAccepted)
+			fmt.Fprintf(w, "Added: "+string(cartItem.ItemID))
 		}
 	case "UPDATE":
 		{
