@@ -44,7 +44,7 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 			templ, err := template.ParseFiles("./views/cart.html")
 			checkError(err)
 
-			cookie, err := r.Cookie("loginCookie")
+			cookie, err := r.Cookie("cartCookie")
 			checkError(err)
 
 			user := cookie.Value
@@ -168,6 +168,12 @@ func (server *Server) handleLogin(w http.ResponseWriter, r *http.Request) {
 			http.SetCookie(w, &http.Cookie{
 				Name:    "loginCookie",
 				Value:   token,
+				Expires: time.Now().Add(time.Minute * 30),
+			})
+
+			http.SetCookie(w, &http.Cookie{
+				Name:    "cartCookie",
+				Value:   user,
 				Expires: time.Now().Add(time.Minute * 30),
 			})
 
