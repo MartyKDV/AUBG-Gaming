@@ -217,14 +217,14 @@ func (graph *Graph) findCosts(goal string) map[string]Costs {
 			checkError(err)
 			distance := response.Rows[0].Elements[0].Distance
 			duration := response.Rows[0].Elements[0].Duration
-			log.Println("-----------------------------Duration: " + duration.String() + " Distance: " + distance.HumanReadable + "---------------------------------")
+			log.Println("From: " + k + "----To: " + goal + "-----Duration: " + duration.String() + "----- Distance: " + distance.HumanReadable + "---------------------------------")
 			//costs[k] = Costs{G: 2, H: 1}
 		}
 	}
 	// Google API for distance(h) and time(g)
 	// create url witj city1.placeID and city2.PlaceID
 	return costs
-}
+}-
 
 func aStarSearch(intial string, goal string) {
 
