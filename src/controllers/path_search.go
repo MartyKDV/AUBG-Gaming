@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"log"
+	"math"
 	"strconv"
 	"strings"
 
@@ -219,10 +220,12 @@ func (graph *Graph) findCosts(goal string) map[string]Costs {
 			checkError(err)
 			distance := response.Rows[0].Elements[0].Distance
 			duration := response.Rows[0].Elements[0].Duration
-			dist, err := strconv.Atoi(strings.Split(distance.HumanReadable, " ")[0])
+			distString := strings.Split(distance.HumanReadable, " ")[0]
+			dist, err := strconv.ParseFloat(distString, 64)
 			checkError(err)
+			distInt := int(math.Round(dist))
 			log.Println("From: " + k + "----To: " + goal + "-----Duration: " + duration.String() + "----- Distance: " + distance.HumanReadable + "---------------------------------")
-			costs[k] = Costs{H: dist, G: int(duration.Minutes())}
+			costs[k] = Costs{H: distInt, G: int(duration.Minutes())}
 		}
 	}
 
