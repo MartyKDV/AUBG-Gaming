@@ -45,7 +45,7 @@ func (server *Server) handleSearch(w http.ResponseWriter, r *http.Request) {
 			min = v.H
 		}
 	}
-	log.Println("Min is : " + string(min))
+	log.Println("Min is : " + strconv.Itoa(min))
 }
 func (server *Server) handleCartDelete(w http.ResponseWriter, r *http.Request) {
 
