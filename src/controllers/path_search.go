@@ -211,8 +211,8 @@ func (graph *Graph) findCosts(goal string) map[string]Costs {
 			checkError(err)
 
 			request := &maps.DistanceMatrixRequest{Mode: "ModeDriving"}
-			request.Origins = append(request.Origins, v)
-			request.Destinations = append(request.Destinations, graph.Cities[goal])
+			request.Origins = append(request.Origins, "place_id:"+v)
+			request.Destinations = append(request.Destinations, "place_id:"+graph.Cities[goal])
 			response, err := c.DistanceMatrix(context.Background(), request)
 			checkError(err)
 			distance := response.Rows[0].Elements[0].Distance
