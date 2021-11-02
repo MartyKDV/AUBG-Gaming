@@ -34,6 +34,11 @@ func createJWT(user string) (string, error) {
 
 	return tokenString, nil
 }
+func (server *Server) handleSearch(w http.ResponseWriter, r *http.Request) {
+
+	var g Graph
+	g.Initialise("Blagoevgrad", "Sofia")
+}
 func (server *Server) handleCartDelete(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
