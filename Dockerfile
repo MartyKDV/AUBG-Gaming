@@ -1,5 +1,6 @@
 FROM golang:1.16-alpine3.12 as builder
-RUN apk --no-cache add ca-certificates
+RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
+RUN update-ca-certificates
 WORKDIR /app
 COPY . .
 RUN go mod download
