@@ -7,7 +7,7 @@ RUN go mod download
 COPY . .
 RUN CGO_ENABLED=0 go build -o /aubg-gaming
 FROM scratch
-COPy --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs
+COPy --from=builder /etc/ssl/certs/ /etc/ssl/certs
 COPY --from=builder /app /app
 COPY --from=builder /aubg-gaming /aubg-gaming
 WORKDIR ./app
