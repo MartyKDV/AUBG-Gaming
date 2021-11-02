@@ -218,11 +218,10 @@ func (graph *Graph) findCosts(goal string) map[string]Costs {
 			distance := response.Rows[0].Elements[0].Distance
 			duration := response.Rows[0].Elements[0].Duration
 			log.Println("From: " + k + "----To: " + goal + "-----Duration: " + duration.String() + "----- Distance: " + distance.HumanReadable + "---------------------------------")
-			//costs[k] = Costs{G: 2, H: 1}
+			costs[k] = Costs{H: distance.Meters, G: int(duration.Minutes())}
 		}
 	}
-	// Google API for distance(h) and time(g)
-	// create url witj city1.placeID and city2.PlaceID
+
 	return costs
 }
 

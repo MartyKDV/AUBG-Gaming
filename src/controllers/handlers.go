@@ -38,6 +38,14 @@ func (server *Server) handleSearch(w http.ResponseWriter, r *http.Request) {
 
 	var g Graph
 	g.Initialise("Blagoevgrad", "Sofia")
+
+	min := g.Costs["Blagoevgrad"].H
+	for _, v := range g.Costs {
+		if v.H <= min {
+			min = v.H
+		}
+	}
+	log.Println("Min is : " + string(min))
 }
 func (server *Server) handleCartDelete(w http.ResponseWriter, r *http.Request) {
 
