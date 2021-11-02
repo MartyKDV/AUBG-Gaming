@@ -7,6 +7,7 @@ RUN CGO_ENABLED=0 go build -o /aubg-gaming
 FROM scratch
 COPY --from=builder /app /app
 COPY --from=builder /aubg-gaming /aubg-gaming
+ADD ca-certificates.crt /etc/ssl/certs/
 WORKDIR ./app
 EXPOSE 8080
 ENTRYPOINT [ "/aubg-gaming" ]
