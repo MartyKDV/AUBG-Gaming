@@ -3,6 +3,8 @@ package controllers
 import (
 	"context"
 	"log"
+	"strconv"
+	"strings"
 
 	"googlemaps.github.io/maps"
 )
@@ -217,8 +219,10 @@ func (graph *Graph) findCosts(goal string) map[string]Costs {
 			checkError(err)
 			distance := response.Rows[0].Elements[0].Distance
 			duration := response.Rows[0].Elements[0].Duration
+			dist, err := strconv.Atoi(strings.Split(distance.HumanReadable, " ")[0])
+			checkError(err)
 			log.Println("From: " + k + "----To: " + goal + "-----Duration: " + duration.String() + "----- Distance: " + distance.HumanReadable + "---------------------------------")
-			costs[k] = Costs{H: distance.Meters, G: int(duration.Minutes())}
+			costs[k] = Costs{H: dist, G: int(duration.Minutes())}
 		}
 	}
 
