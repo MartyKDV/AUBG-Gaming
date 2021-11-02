@@ -224,7 +224,7 @@ func (graph *Graph) findCosts(goal string) map[string]Costs {
 	// Google API for distance(h) and time(g)
 	// create url witj city1.placeID and city2.PlaceID
 	return costs
-}-
+}
 
 func aStarSearch(intial string, goal string) {
 
