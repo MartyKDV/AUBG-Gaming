@@ -240,12 +240,12 @@ func (graph *Graph) findCosts(goal string) map[string]Costs {
 	return costs
 }
 
-func (graph *Graph) aStarSearch(intial string, goal string) []string {
+func (graph *Graph) aStarSearch(initial string, goal string) []string {
 
-	start := Node{Name: intial, Parent: nil, Cost: 0, F: 0}
+	start := Node{Name: initial, Parent: nil, Cost: 0, F: 0}
 	var path []string
 	path = graph.search(start, goal)
-
+	path = append(path, initial)
 	return path
 }
 
@@ -261,6 +261,7 @@ func (graph *Graph) search(node Node, goal string) []string {
 		node := heap.Pop(&priorityQueue).(*Node)
 		if node.Name == goal {
 
+			reached[node.Name] = node
 			nodes := make([]string, 0)
 			i := 0
 			for _, v := range reached {
