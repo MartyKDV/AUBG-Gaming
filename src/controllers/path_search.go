@@ -251,9 +251,9 @@ func (graph *Graph) aStarSearch(intial string, goal string) []string {
 
 func (graph *Graph) search(node Node, goal string) []string {
 
-	priorityQueue := make(PriorityQueue, 1000)
-	heap.Init(&priorityQueue)
-	heap.Push(&priorityQueue, &node)
+	priorityQueue := new(PriorityQueue)
+	heap.Init(priorityQueue)
+	heap.Push(priorityQueue, &node)
 	reached := make(map[string]*Node)
 
 	for priorityQueue.Len() != 0 {
@@ -274,11 +274,11 @@ func (graph *Graph) search(node Node, goal string) []string {
 			if _, ok := reached[v.Name]; !ok {
 
 				reached[v.Name] = v
-				heap.Push(&priorityQueue, v)
+				heap.Push(priorityQueue, v)
 			} else {
 				if v.F < reached[v.Name].F {
 					reached[v.Name] = v
-					heap.Push(&priorityQueue, v)
+					heap.Push(priorityQueue, v)
 				}
 			}
 		}
