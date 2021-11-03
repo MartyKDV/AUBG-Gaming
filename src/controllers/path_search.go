@@ -258,7 +258,7 @@ func (graph *Graph) search(node Node, goal string) []string {
 
 	for priorityQueue.Len() != 0 {
 
-		node := heap.Pop(&PriorityQueue{}).(*Node)
+		node := heap.Pop(&priorityQueue).(*Node)
 		if node.Name == goal {
 
 			nodes := make([]string, 0)
