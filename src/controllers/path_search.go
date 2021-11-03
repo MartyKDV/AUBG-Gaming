@@ -262,7 +262,7 @@ func (graph *Graph) search(node Node, goal string) []string {
 		if node.Name == goal {
 
 			reached[node.Name] = node
-			nodes := make([]string, 0)
+			nodes := make([]string, 100)
 			i := 0
 			for _, v := range reached {
 				nodes[i] = v.Name
