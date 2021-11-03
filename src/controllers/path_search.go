@@ -1,8 +1,8 @@
 package controllers
 
 import (
+	"container/heap"
 	"context"
-	"log"
 	"math"
 	"strconv"
 	"strings"
@@ -15,10 +15,19 @@ type Costs struct {
 	H int
 }
 
+type Node struct {
+	Name   string
+	Parent *Node
+	Cost   int
+	F      int
+	Index  int
+}
+
 type Graph struct {
 	Edges  map[string][]string
 	Costs  map[string]Costs
 	Cities map[string]string
+	Nodes  *[]Node
 }
 
 func (graph *Graph) Initialise(initial string, goal string) {
@@ -224,7 +233,6 @@ func (graph *Graph) findCosts(goal string) map[string]Costs {
 			dist, err := strconv.ParseFloat(distString, 64)
 			checkError(err)
 			distInt := int(math.Round(dist))
-			log.Println("From: " + k + "----To: " + goal + "-----Duration: " + duration.String() + "----- Distance: " + distance.HumanReadable + "---------------------------------")
 			costs[k] = Costs{H: distInt, G: int(duration.Minutes())}
 		}
 	}
@@ -232,6 +240,103 @@ func (graph *Graph) findCosts(goal string) map[string]Costs {
 	return costs
 }
 
-func aStarSearch(intial string, goal string) {
+func (graph *Graph) aStarSearch(intial string, goal string) []string {
 
+	start := Node{Name: intial, Parent: nil, Cost: 0, F: 0}
+	var path []string
+	path = graph.search(start, goal)
+
+	return path
+}
+
+func (graph *Graph) search(node Node, goal string) []string {
+
+	priorityQueue := make(PriorityQueue, 0, 1000)
+	heap.Init(&priorityQueue)
+	heap.Push(&priorityQueue, &node)
+	reached := make(map[string]*Node)
+
+	for priorityQueue.Len() != 0 {
+
+		node := heap.Pop(&PriorityQueue{}).(*Node)
+		if node.Name == goal {
+
+			nodes := make([]string, 0)
+			i := 0
+			for _, v := range reached {
+				nodes[i] = v.Name
+				i++
+			}
+			return nodes
+		}
+		children := graph.getChildren(node)
+		for _, v := range children {
+			if _, ok := reached[v.Name]; !ok {
+
+				reached[v.Name] = v
+				heap.Push(&priorityQueue, v)
+			} else {
+				if v.F < reached[v.Name].F {
+					reached[v.Name] = v
+					heap.Push(&priorityQueue, v)
+				}
+			}
+		}
+	}
+
+	return nil
+}
+
+func (graph *Graph) getChildren(node *Node) []*Node {
+
+	var children []*Node
+	for _, v := range graph.Edges[node.Name] {
+
+		c, err := maps.NewClient(maps.WithAPIKey("AIzaSyDcZ1Dks3_6CnPF11dfvwEJtk60JiBaQBc"))
+		checkError(err)
+
+		request := &maps.DistanceMatrixRequest{Mode: "ModeDriving"}
+		request.Origins = append(request.Origins, "place_id:"+graph.Cities[node.Name])
+		request.Destinations = append(request.Destinations, "place_id:"+graph.Cities[v])
+		response, err := c.DistanceMatrix(context.Background(), request)
+		checkError(err)
+		duration := response.Rows[0].Elements[0].Duration
+		cost := int(duration.Minutes())
+		cost = node.Cost + cost
+
+		n := Node{Name: v, Parent: node, Cost: cost, F: cost + graph.Costs[v].H}
+		children = append(children, &n)
+	}
+
+	return children
+}
+
+// Priority Queue Definition
+type PriorityQueue []*Node
+
+func (pq PriorityQueue) Len() int { return len(pq) }
+func (pq PriorityQueue) Less(i, j int) bool {
+	return pq[i].F < pq[j].F
+}
+func (pq PriorityQueue) Swap(i, j int) {
+	pq[i], pq[j] = pq[j], pq[i]
+	pq[i].Index = i
+	pq[j].Index = j
+}
+func (pq *PriorityQueue) Pop() interface{} {
+
+	old := *pq
+	n := len(old)
+	node := old[n-1]
+	old[n-1] = nil
+	node.Index = -1
+	*pq = old[0 : n-1]
+	return node
+}
+func (pq *PriorityQueue) Push(node interface{}) {
+
+	n := len(*pq)
+	city := node.(*Node)
+	city.Index = n
+	*pq = append(*pq, city)
 }

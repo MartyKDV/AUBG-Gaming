@@ -39,13 +39,12 @@ func (server *Server) handleSearch(w http.ResponseWriter, r *http.Request) {
 	var g Graph
 	g.Initialise("Blagoevgrad", "Sofia")
 
-	min := g.Costs["Blagoevgrad"].H
-	for _, v := range g.Costs {
-		if v.H <= min {
-			min = v.H
-		}
+	path := g.aStarSearch("Blagoevgrad", "Sofia")
+	answer := ""
+	for i := range path {
+		answer += path[i]
 	}
-	log.Println("Min is : " + strconv.Itoa(min))
+	log.Println("Path: " + answer)
 }
 func (server *Server) handleCartDelete(w http.ResponseWriter, r *http.Request) {
 
