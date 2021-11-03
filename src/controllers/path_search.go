@@ -245,7 +245,6 @@ func (graph *Graph) aStarSearch(initial string, goal string) []string {
 	start := Node{Name: initial, Parent: nil, Cost: 0, F: 0}
 	var path []string
 	path = graph.search(start, goal)
-	path = append(path, initial)
 	return path
 }
 

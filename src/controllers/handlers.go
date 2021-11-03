@@ -37,9 +37,9 @@ func createJWT(user string) (string, error) {
 func (server *Server) handleSearch(w http.ResponseWriter, r *http.Request) {
 
 	var g Graph
-	g.Initialise("Blagoevgrad", "Sofia")
+	g.Initialise("Blagoevgrad", "Silistra")
 
-	path := g.aStarSearch("Blagoevgrad", "Sofia")
+	path := g.aStarSearch("Blagoevgrad", "Silistra")
 	answer := ""
 	for i := range path {
 		answer += path[i]
