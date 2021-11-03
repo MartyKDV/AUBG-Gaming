@@ -252,7 +252,7 @@ func (graph *Graph) search(node Node, goal string) []string {
 
 	priorityQueue := make(PriorityQueue, 1000)
 	heap.Init(&priorityQueue)
-	priorityQueue = append(priorityQueue, &node)
+	priorityQueue.Push(&node)
 	reached := make(map[string]*Node)
 
 	for priorityQueue.Len() != 0 {
