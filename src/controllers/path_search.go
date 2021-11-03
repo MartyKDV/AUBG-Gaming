@@ -264,8 +264,10 @@ func (graph *Graph) search(node Node, goal string) []string {
 			reached[node.Name] = node
 			nodes := make([]string, 100)
 			i := 0
-			for _, v := range reached {
-				nodes[i] = v.Name
+			current := node
+			for current != nil {
+				nodes[i] = current.Name
+				current = current.Parent
 				i++
 			}
 			return nodes
