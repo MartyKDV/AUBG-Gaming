@@ -76,6 +76,7 @@ func (server *Server) handleCheckout(w http.ResponseWriter, r *http.Request) {
 		var cartItem models.CartItemDetails
 		err := result.Scan(&cartItem.ID, &cartItem.Name, &price)
 		checkError(err)
+		price = price * float64(i.Quantity)
 		total += price
 		cartItem.Quantity = i.Quantity
 		cartItems.CartItems = append(cartItems.CartItems, cartItem)

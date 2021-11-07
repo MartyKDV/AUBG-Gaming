@@ -37,7 +37,7 @@ func Search(initial string, goal string) string {
 
 	path := g.aStarSearch(initial, goal)
 	answer := ""
-	for i := len(path) - 1; i >= 0; i++ {
+	for i := len(path) - 1; i >= 0; i-- {
 		if i == 0 {
 			answer += path[i]
 			break
