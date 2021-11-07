@@ -42,7 +42,9 @@ func Search(initial string, goal string) string {
 			answer += path[i]
 			break
 		}
-		answer += path[i] + "-->"
+		if path[i] != "" {
+			answer += path[i] + "-->"
+		}
 	}
 	return answer
 }
