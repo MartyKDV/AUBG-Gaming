@@ -1,0 +1,101 @@
+<html>
+    <head>
+        <title>
+            Login
+        </title>
+        <link rel="stylesheet" href="navbar_style.css">
+        <style>
+            .cart{
+                width: 10%;
+                height: 25%;
+                margin: auto;
+                margin-top: 100px;
+                text-align: left;
+            }
+        </style>
+    </head>
+    <body style="text-align: center;">
+
+        <h2> AUBG Gaming </h2>
+
+        <div class="navbar">
+            <div class="nav_option">
+                <a href="/">            Homepage    </a>
+            </div>
+            <div class="nav_option">
+                <a href="/products">    Products    </a>
+            </div>
+            <div class="nav_option">
+                <a href="/login">       Login       </a>
+            </div>
+            <div class="nav_option">
+                <a href="/register">    Register    </a>
+            </div>
+            <div class="nav_option">
+                <a href="/cart">        Cart        </a>
+            </div>
+        </div>
+
+        <div class="cart">
+
+            <table>
+                <tr>
+                    <th> Name       </th>
+                    <th> Quantity   </th>
+                </tr>
+                {{range $k := .CartItems}}
+                <tr>
+                    <td> {{$k.Name}}       </td>
+                    <td><form method="post" action="/cart/quantity/{{$k.ID}}"><input type="number" min="1" name="quantity" value="{{$k.Quantity}}"></td>
+                    <td><input type="submit" value="Edit"></form></td>
+                    <td><form method="post" action="/cart/delete/{{$k.ID}}"><input type="submit" value="Delete"></form></td>
+                </tr>
+                {{end}}
+            </table>
+            <br>
+            <h6>Total: {{.Total}}</h6>
+            <form method="post" action="/order">
+
+                <label for="city"> City: </label>
+                <select name="city" id="city">
+                    <option value="Blagoevgrad">    Blagoevgrad     </option>
+                    <option value="Burgas">         Burgas          </option>
+                    <option value="Dobrich">        Dobrich         </option>
+                    <option value="Gabrovo">        Gabrovo         </option>
+                    <option value="Haskovo">        Haskovo         </option>
+                    <option value="Kardzhali">      Kardzhali       </option>
+                    <option value="Kyustendil">     Kyustendil      </option>
+                    <option value="Lovech">         Lovech          </option>
+                    <option value="Montana">        Montana         </option>
+                    <option value="Pazardzhik">     Pazardzhik      </option>
+                    <option value="Pernik">         Pernik          </option>
+                    <option value="Pleven">         Pleven          </option>
+                    <option value="Plovdiv">        Plovdiv         </option>
+                    <option value="Razgrad">        Razgrad         </option>
+                    <option value="Ruse">           Ruse            </option>
+                    <option value="Shumen">         Shumen          </option>
+                    <option value="Silistra">       Silistra        </option>
+                    <option value="Sliven">         Sliven          </option>
+                    <option value="Smolyan">        Smolyan         </option>
+                    <option value="Sofia">          Sofia           </option>
+                    <option value="Stara Zagora">   Stara Zagora    </option>
+                    <option value="Targovishte">    Targovishte     </option>
+                    <option value="Varna">          Varna           </option>
+                    <option value="Veliko Tarnovo"> Veliko Tarnovo  </option>
+                    <option value="Vidin">          Vidin           </option>
+                    <option value="Vratsa">         Vratsa          </option>
+                    <option value="Yambol">         Yambol          </option>
+                </select>
+                <input type="submit" value="Order">
+            </form>
+
+
+            <form action="/checkout">
+                <input type="submit" value="Checkout">
+            </form>
+            
+           
+        </div>
+            
+    </body>
+</html>

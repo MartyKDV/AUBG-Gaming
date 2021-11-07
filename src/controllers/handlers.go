@@ -34,6 +34,45 @@ func createJWT(user string) (string, error) {
 
 	return tokenString, nil
 }
+
+func (server *Server) handleOrder(w http.ResponseWriter, r *http.Request) {
+
+}
+func (server *Server) handleCheckout(w http.ResponseWriter, r *http.Request) {
+
+	templ, err := template.ParseFiles("./views/checkout.html")
+	checkError(err)
+
+	cookie, err := r.Cookie("cartCookie")
+	checkError(err)
+
+	user := cookie.Value
+	log.Println("Got: " + user)
+	cart := server.GetCart(user)
+
+	var total, price float64 = 0.00, 0.00
+	type cartInfo struct {
+		CartItems []models.CartItemDetails
+		Total     float64
+	}
+	var cartItems cartInfo
+
+	for _, i := range cart.CartItems {
+
+		idString := strconv.Itoa(i.ItemID)
+		result := server.Db.QueryRow("SELECT id, name, price FROM products WHERE id = " + idString)
+		var cartItem models.CartItemDetails
+		err := result.Scan(&cartItem.ID, &cartItem.Name, &price)
+		checkError(err)
+		total += price
+		cartItem.Quantity = i.Quantity
+		cartItems.CartItems = append(cartItems.CartItems, cartItem)
+	}
+	cartItems.Total = total
+
+	err = templ.Execute(w, cartItems)
+	checkError(err)
+}
 func (server *Server) handleSearch(w http.ResponseWriter, r *http.Request) {
 
 	var g Graph
@@ -97,7 +136,6 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 			cart := server.GetCart(user)
 
 			var cartItems []models.CartItemDetails
-
 			for _, i := range cart.CartItems {
 
 				idString := strconv.Itoa(i.ItemID)
@@ -135,14 +173,6 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 
 			err = templ.Execute(w, "Added an Item to cart!")
 			checkError(err)
-		}
-	case "UPDATE":
-		{
-			//EditQuantityItem()
-		}
-	case "DELETE":
-		{
-			//DeleteItem()
 		}
 	}
 }

@@ -36,7 +36,7 @@ func (graph *Graph) Initialise(initial string, goal string) {
 	graph.Costs = make(map[string]Costs)
 	graph.Cities = make(map[string]string)
 
-	// Add Cities nad placeIDs
+	// Add Cities and placeIDs
 	{
 		graph.AddCity("Blagoevgrad", "ChIJYw9_jwD2qhQRjfVAhLbcfEE")
 		graph.AddCity("Burgas", "ChIJkZ38-WaSpkAR8E2_aRKgAAQ")

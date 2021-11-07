@@ -43,7 +43,7 @@
                     <th> Name       </th>
                     <th> Quantity   </th>
                 </tr>
-                {{range $k := .}}
+                {{range $k := .CartItems}}
                 <tr>
                     <td> {{$k.Name}}       </td>
                     <td><form method="post" action="/cart/quantity/{{$k.ID}}"><input type="number" min="1" name="quantity" value="{{$k.Quantity}}"></td>
@@ -52,6 +52,11 @@
                 </tr>
                 {{end}}
             </table>
+            <br>
+            <form action="/checkout">
+                <input type="submit" value="Checkout">
+            </form>
+            
            
         </div>
             
