@@ -37,6 +37,18 @@ func createJWT(user string) (string, error) {
 
 func (server *Server) handleOrder(w http.ResponseWriter, r *http.Request) {
 
+	templ, err := template.ParseFiles("./views/status.html")
+	checkError(err)
+
+	intial := os.Getenv("INITIAL_CITY")
+	goal := r.FormValue("city")
+
+	path := Search(intial, goal)
+
+	response := "Order is Successful<br>" + path
+
+	err = templ.Execute(w, response)
+	checkError(err)
 }
 func (server *Server) handleCheckout(w http.ResponseWriter, r *http.Request) {
 
@@ -98,7 +110,6 @@ func (server *Server) handleCartDelete(w http.ResponseWriter, r *http.Request) {
 	server.DeleteCartItem(user, intID)
 
 	http.Redirect(w, r, "/cart", http.StatusSeeOther)
-	return
 }
 
 func (server *Server) handleCartUpdate(w http.ResponseWriter, r *http.Request) {
@@ -117,7 +128,6 @@ func (server *Server) handleCartUpdate(w http.ResponseWriter, r *http.Request) {
 	server.UpdateQuantity(user, intID, quantityInt)
 
 	http.Redirect(w, r, "/cart", http.StatusSeeOther)
-	return
 }
 func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 
@@ -232,7 +242,7 @@ func (server *Server) handleLogin(w http.ResponseWriter, r *http.Request) {
 			err := result.Scan(&hashedPass)
 			if err != nil {
 				response = "Invalid User"
-				log.Printf(err.Error())
+				log.Println(err.Error())
 			} else {
 				err = bcrypt.CompareHashAndPassword([]byte(hashedPass), pass)
 				if err != nil {

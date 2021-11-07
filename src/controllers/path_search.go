@@ -30,6 +30,23 @@ type Graph struct {
 	Nodes  *[]Node
 }
 
+func Search(initial string, goal string) string {
+
+	var g Graph
+	g.Initialise(initial, goal)
+
+	path := g.aStarSearch(initial, goal)
+	answer := ""
+	for i := len(path) - 1; i >= 0; i++ {
+		if i == 0 {
+			answer += path[i]
+			break
+		}
+		answer += path[i] + "-->"
+	}
+	return answer
+}
+
 func (graph *Graph) Initialise(initial string, goal string) {
 
 	graph.Edges = make(map[string][]string)
