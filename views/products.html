@@ -13,6 +13,28 @@
                 margin-right: 50px;
                 float: left;
             }
+            .filters-container{
+                width: 20%;
+                height: 70%;
+                float: left;
+                margin-top: 50px;
+                margin-left: 100px;
+                border-right: 2px solid black;
+            }
+            .filters{
+                text-align: left;
+                width: 50%;
+                margin: auto;
+                margin-top: 20%;
+                margin-left: 50%;
+            }
+            .products-container{
+                width: 40%;
+                float: left;
+                height: 70%;
+                margin-top: 50px;
+                margin-left: 70px;
+            }
         </style>
     </head>
     <body style="text-align: center;">
@@ -36,8 +58,40 @@
                 <a href="/cart">        Cart        </a>
             </div>
         </div>
-            
-        <div style="margin-top: 50px;">
+            <br>
+        <div class="filters-container">
+            <div class="filters">
+                <form method="post" action="/filter">
+                    <input type="checkbox" name="filter-category" value="game" id="game">
+                    <label for="game">      Games       </label><br>
+                    <input type="checkbox" name="filter-category" value="hardware" id="hardware">
+                    <label for="hardware">  Hardware    </label><br>
+                    <input type="checkbox" name="filter-category" value="service" id="service">
+                    <label for="service">   Services    </label><br>
+                    <br>
+                    <br>
+                    <input type="checkbox" name="filter-game" value="RPG" id="rpg">
+                    <label for="rpg">       RPG        </label><br>
+                    <input type="checkbox" name="filter-game" value="Adventure" id="Adventure">
+                    <label for="Adventure"> Adventure  </label><br>
+                    <input type="checkbox" name="filter-game" value="FPS" id="fps">
+                    <label for="fps">       FPS        </label><br>
+                    <input type="checkbox" name="filter-game" value="Survival" id="Survival">
+                    <label for="Survival">  Survival   </label><br>
+                    <input type="checkbox" name="filter-game" value="Sports" id="Sports">
+                    <label for="Sports">    Sports     </label><br>
+                    <br>
+                    <br>
+                    <input type="checkbox" name="filter-hardware" value="Mouse" id="mouse">
+                    <label for="mouse">     Mouse       </label><br>
+                    <input type="checkbox" name="filter-hardware" value="Keyboard" id="keyboard">
+                    <label for="keyboard">  Keyboard    </label><br>
+                    <br>
+                    <input type="submit" value="Apply">
+                </form>
+            </div>
+        </div>
+        <div class="products-container">
             <div style="display: inline-block;">
                 {{range $k := .}}
                     <p class="item">

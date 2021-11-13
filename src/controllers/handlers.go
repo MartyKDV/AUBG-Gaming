@@ -35,6 +35,66 @@ func createJWT(user string) (string, error) {
 	return tokenString, nil
 }
 
+func (server *Server) handleFilter(w http.ResponseWriter, r *http.Request) {
+
+	templ, err := template.ParseFiles("./views/products.html")
+	checkError(err)
+
+	filters := r.PostForm
+
+	sql := "SELECT * FROM products "
+	if len(filters["filter-category"]) > 0 || len(filters["filter-game"]) > 0 || len(filters["filter-hardware"]) > 0 {
+		sql += "WHERE "
+
+		if len(filters["filter-category"]) > 0 {
+			sql += "category IN ("
+			for i, v := range filters["filter-category"] {
+				if i == (len(filters["filter-category"]) - 1) {
+					sql += "'" + v + "') "
+				} else {
+					sql += "'" + v + "',"
+				}
+			}
+		}
+
+		if len(filters["filter-game"]) > 0 {
+			sql += "AND genre IN ("
+			for i, v := range filters["filter-game"] {
+				if i == (len(filters["filter-game"]) - 1) {
+					sql += "'" + v + "') "
+				} else {
+					sql += "'" + v + "',"
+				}
+			}
+		}
+
+		if len(filters["filter-hardware"]) > 0 {
+			sql += "AND hardware_type IN ("
+			for i, v := range filters["filter-hardware"] {
+				if i == (len(filters["filter-hardware"]) - 1) {
+					sql += "'" + v + "') "
+				} else {
+					sql += "'" + v + "',"
+				}
+			}
+		}
+
+		var products []models.Item
+		results, err := server.Db.Query(sql)
+		checkError(err)
+
+		for results.Next() {
+			var p models.Item
+			err = results.Scan(&p.Id, &p.Name, &p.Price, &p.Discount, &p.Genre, &p.ReleaseDate, &p.Features, &p.Category)
+			checkError(err)
+			products = append(products, p)
+		}
+
+		err = templ.Execute(w, products)
+		checkError(err)
+	}
+}
+
 func (server *Server) handleOrder(w http.ResponseWriter, r *http.Request) {
 
 	templ, err := template.ParseFiles("./views/status.html")
@@ -112,7 +172,6 @@ func (server *Server) handleCartDelete(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/cart", http.StatusSeeOther)
 }
-
 func (server *Server) handleCartUpdate(w http.ResponseWriter, r *http.Request) {
 
 	quantity := r.FormValue("quantity")
@@ -187,7 +246,6 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
-
 func (server *Server) handleRegister(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":

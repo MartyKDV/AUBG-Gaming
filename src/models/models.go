@@ -33,7 +33,8 @@ type Game struct {
 }
 
 type Hardware struct {
-	Features sql.NullString
+	Features     sql.NullString
+	HardwareType sql.NullString
 }
 
 type Service struct {
