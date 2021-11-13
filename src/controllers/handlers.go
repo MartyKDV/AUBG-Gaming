@@ -48,7 +48,12 @@ func (server *Server) handleFilter(w http.ResponseWriter, r *http.Request) {
 	if len(filters["filter-category"]) > 0 || len(filters["filter-game"]) > 0 || len(filters["filter-hardware"]) > 0 {
 		sql += "WHERE "
 
+		extra := false
 		if len(filters["filter-category"]) > 0 {
+			if extra {
+				sql += "AND "
+			}
+			extra = true
 			sql += "category IN ("
 			for i, v := range filters["filter-category"] {
 				log.Println(v)
@@ -61,7 +66,11 @@ func (server *Server) handleFilter(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if len(filters["filter-game"]) > 0 {
-			sql += "AND genre IN ("
+			if extra {
+				sql += "AND "
+			}
+			extra = true
+			sql += "genre IN ("
 			for i, v := range filters["filter-game"] {
 				log.Println(v)
 				if i == (len(filters["filter-game"]) - 1) {
@@ -73,7 +82,11 @@ func (server *Server) handleFilter(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if len(filters["filter-hardware"]) > 0 {
-			sql += "AND hardware_type IN ("
+			if extra {
+				sql += "AND "
+			}
+			extra = true
+			sql += "hardware_type IN ("
 			for i, v := range filters["filter-hardware"] {
 				log.Println(v)
 				if i == (len(filters["filter-hardware"]) - 1) {
