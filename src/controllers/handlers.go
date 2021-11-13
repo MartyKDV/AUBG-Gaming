@@ -39,8 +39,9 @@ func (server *Server) handleFilter(w http.ResponseWriter, r *http.Request) {
 
 	templ, err := template.ParseFiles("./views/products.html")
 	checkError(err)
-
+	log.Println("In handle func")
 	filters := r.PostForm
+	log.Println("got vars")
 
 	sql := "SELECT * FROM products "
 	if len(filters["filter-category"]) > 0 || len(filters["filter-game"]) > 0 || len(filters["filter-hardware"]) > 0 {
