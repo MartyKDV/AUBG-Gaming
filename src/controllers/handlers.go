@@ -40,8 +40,9 @@ func (server *Server) handleFilter(w http.ResponseWriter, r *http.Request) {
 	templ, err := template.ParseFiles("./views/products.html")
 	checkError(err)
 	log.Println("In handle func")
-	filters := r.PostForm
-	log.Println("got vars")
+	r.ParseForm()
+	filters := r.Form
+	log.Println(filters)
 
 	sql := "SELECT * FROM products "
 	if len(filters["filter-category"]) > 0 || len(filters["filter-game"]) > 0 || len(filters["filter-hardware"]) > 0 {
@@ -82,22 +83,21 @@ func (server *Server) handleFilter(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		}
-
-		var products []models.Item
-		results, err := server.Db.Query(sql)
-		checkError(err)
-
-		for results.Next() {
-			var p models.Item
-			err = results.Scan(&p.Id, &p.Name, &p.Price, &p.Discount, &p.Genre, &p.ReleaseDate, &p.Features, &p.HardwareType, &p.Category)
-			checkError(err)
-			log.Println(p)
-			products = append(products, p)
-		}
-
-		err = templ.Execute(w, products)
-		checkError(err)
 	}
+	var products []models.Item
+	results, err := server.Db.Query(sql)
+	checkError(err)
+
+	for results.Next() {
+		var p models.Item
+		err = results.Scan(&p.Id, &p.Name, &p.Price, &p.Discount, &p.Genre, &p.ReleaseDate, &p.Features, &p.HardwareType, &p.Category)
+		checkError(err)
+		log.Println(p)
+		products = append(products, p)
+	}
+
+	err = templ.Execute(w, products)
+	checkError(err)
 }
 
 func (server *Server) handleOrder(w http.ResponseWriter, r *http.Request) {
