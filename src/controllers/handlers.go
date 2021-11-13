@@ -49,6 +49,7 @@ func (server *Server) handleFilter(w http.ResponseWriter, r *http.Request) {
 		if len(filters["filter-category"]) > 0 {
 			sql += "category IN ("
 			for i, v := range filters["filter-category"] {
+				log.Println(v)
 				if i == (len(filters["filter-category"]) - 1) {
 					sql += "'" + v + "') "
 				} else {
@@ -60,6 +61,7 @@ func (server *Server) handleFilter(w http.ResponseWriter, r *http.Request) {
 		if len(filters["filter-game"]) > 0 {
 			sql += "AND genre IN ("
 			for i, v := range filters["filter-game"] {
+				log.Println(v)
 				if i == (len(filters["filter-game"]) - 1) {
 					sql += "'" + v + "') "
 				} else {
@@ -71,6 +73,7 @@ func (server *Server) handleFilter(w http.ResponseWriter, r *http.Request) {
 		if len(filters["filter-hardware"]) > 0 {
 			sql += "AND hardware_type IN ("
 			for i, v := range filters["filter-hardware"] {
+				log.Println(v)
 				if i == (len(filters["filter-hardware"]) - 1) {
 					sql += "'" + v + "') "
 				} else {
@@ -87,6 +90,7 @@ func (server *Server) handleFilter(w http.ResponseWriter, r *http.Request) {
 			var p models.Item
 			err = results.Scan(&p.Id, &p.Name, &p.Price, &p.Discount, &p.Genre, &p.ReleaseDate, &p.Features, &p.HardwareType, &p.Category)
 			checkError(err)
+			log.Println(p)
 			products = append(products, p)
 		}
 
