@@ -85,7 +85,7 @@ func (server *Server) handleFilter(w http.ResponseWriter, r *http.Request) {
 
 		for results.Next() {
 			var p models.Item
-			err = results.Scan(&p.Id, &p.Name, &p.Price, &p.Discount, &p.Genre, &p.ReleaseDate, &p.Features, &p.Category)
+			err = results.Scan(&p.Id, &p.Name, &p.Price, &p.Discount, &p.Genre, &p.ReleaseDate, &p.Features, &p.HardwareType, &p.Category)
 			checkError(err)
 			products = append(products, p)
 		}
@@ -344,7 +344,7 @@ func (server *Server) handleProducts(w http.ResponseWriter, r *http.Request) {
 
 	for results.Next() {
 		var p models.Item
-		err = results.Scan(&p.Id, &p.Name, &p.Price, &p.Discount, &p.Genre, &p.ReleaseDate, &p.Features, &p.Category)
+		err = results.Scan(&p.Id, &p.Name, &p.Price, &p.Discount, &p.Genre, &p.ReleaseDate, &p.Features, &p.HardwareType, &p.Category)
 		checkError(err)
 		products = append(products, p)
 	}
@@ -364,7 +364,7 @@ func (server *Server) handleProductID(w http.ResponseWriter, r *http.Request) {
 	var item models.Item
 
 	result := server.Db.QueryRow("SELECT * FROM products WHERE id = " + id)
-	err = result.Scan(&item.Id, &item.Name, &item.Price, &item.Discount, &item.Genre, &item.ReleaseDate, &item.Features, &item.Category)
+	err = result.Scan(&item.Id, &item.Name, &item.Price, &item.Discount, &item.Genre, &item.ReleaseDate, &item.Features, &item.HardwareType, &item.Category)
 	checkError(err)
 
 	err = templ.Execute(w, item)
