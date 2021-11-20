@@ -27,13 +27,13 @@ spec:
       containers:
         - env:
             - name: MYSQL_DATABASE
-              value: ${DB_NAME}
+              value: aubg-gaming-db
             - name: MYSQL_PASSWORD
-              value: ${DB_PASSWORD}
+              value: F8>V@44qW(Wh{f*$
             - name: MYSQL_ROOT_PASSWORD
-              value: ${DB_PASSWORD}
+              value: F8>V@44qW(Wh{f*$
             - name: MYSQL_USER
-              value: ${DB_USER}
+              value: martykdv
           image: mysql:latest
           name: mysql-db
           ports:
