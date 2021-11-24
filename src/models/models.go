@@ -24,6 +24,7 @@ type Item struct {
 	Product
 	Game
 	Hardware
+	Service
 	Category string
 }
 

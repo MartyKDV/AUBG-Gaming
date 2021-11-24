@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: phpmyadmin
   name: phpmyadmin
 spec:
+  type: NodePort
   ports:
     - name: "8081"
       port: 8081
