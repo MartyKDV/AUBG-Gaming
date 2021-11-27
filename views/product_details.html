@@ -39,10 +39,8 @@
             <div style="display: inline-block;">
             {{$k := .}}
                 <p class="item">
-                    ID: {{$k.Id}}                                   <br>
                     Name: {{$k.Name}}                               <br>
                     Price: {{$k.Price}}                             <br>
-                    Discount: {{$k.Discount}}                       <br>
                     {{if (eq $k.Category "game")}}
                         Genre: {{$k.Genre.String}}                  <br>
                         Release Date: {{$k.ReleaseDate.String}}     <br>
@@ -50,6 +48,9 @@
                     {{if (eq $k.Category "hardware")}}
                         Features: {{$k.Features.String}}            <br>
                     {{end}} 
+                    {{if (eq $k.Category "service")}}
+                        Type of Service: {{$k.ServiceType.String}}  <br>
+                    {{end}}
 
                     <form method="post" action="/cart/{{$k.Id}}">
                         <input type="submit" value="Add to Cart">   <br>

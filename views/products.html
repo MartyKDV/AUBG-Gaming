@@ -95,7 +95,6 @@
             <div style="display: inline-block;">
                 {{range $k := .}}
                     <p class="item">
-                        ID: {{$k.Id}}                                           <br>
                         Name: <a href="/product/{{$k.Id}}">{{$k.Name}}</a>      <br>
                         Price: {{$k.Price}}                                     <br>
                         Discount: {{$k.Discount}}                               <br>
@@ -106,9 +105,7 @@
                         {{if (eq $k.Category "hardware")}}
                             Features: {{$k.Features.String}}                    <br>
                         {{end}}
-                        {{if (eq $k.Category "service")}}
-                            Type of Service: {{$k.ServiceType.String}}          <br>
-                        {{end}}
+                        
                     </p>
                 {{end}}
             </div>

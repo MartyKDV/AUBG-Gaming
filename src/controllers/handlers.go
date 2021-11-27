@@ -281,9 +281,10 @@ func (server *Server) handleRegister(w http.ResponseWriter, r *http.Request) {
 			passString := r.FormValue("password")
 			pass := []byte(passString)
 			var response string
+			sqlInsert, err := server.Db.Prepare("INSERT INTO credentials (user, password) VALUES ('?', '?')")
+			checkError(err)
 
 			matchEmail, _ := regexp.MatchString("^[a-z0-9._%+\\-]+@[a-z0-9.\\-]+\\.[a-z]{2,4}$", user)
-
 			if matchEmail {
 
 				matchPass, _ := regexp.MatchString("^[a-zA-Z0-9._%+\\-]+$", passString)
@@ -297,7 +298,8 @@ func (server *Server) handleRegister(w http.ResponseWriter, r *http.Request) {
 					checkError(err)
 
 					hashedPassString = string(hashedPass)
-					_, err = server.Db.Exec("INSERT INTO credentials (user, password) VALUES ('" + user + "', '" + hashedPassString + "')")
+					sqlInsert.Exec(user, hashedPassString)
+					//_, err = server.Db.Exec("INSERT INTO credentials (user, password) VALUES ('" + user + "', '" + hashedPassString + "')")
 					checkError(err)
 
 					response = "Successfully Registered!"
