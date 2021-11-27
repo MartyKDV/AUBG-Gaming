@@ -6,6 +6,7 @@ import (
 	"main/src/models"
 	"net/http"
 	"os"
+	"regexp"
 	"strconv"
 	"text/template"
 	"time"
@@ -277,19 +278,37 @@ func (server *Server) handleRegister(w http.ResponseWriter, r *http.Request) {
 	case "POST":
 		{
 			user := r.FormValue("user")
-			pass := []byte(r.FormValue("password"))
-			var hashedPassString string
-			hashedPass, err := bcrypt.GenerateFromPassword(pass, bcrypt.DefaultCost)
-			checkError(err)
+			passString := r.FormValue("password")
+			pass := []byte(passString)
+			var response string
 
-			err = bcrypt.CompareHashAndPassword(hashedPass, pass)
-			checkError(err)
+			matchEmail, _ := regexp.MatchString("^[a-z0-9._%+\\-]+@[a-z0-9.\\-]+\\.[a-z]{2,4}$", user)
 
-			hashedPassString = string(hashedPass)
-			_, err = server.Db.Exec("INSERT INTO credentials (user, password) VALUES ('" + user + "', '" + hashedPassString + "')")
-			checkError(err)
+			if matchEmail {
 
-			response := "Successfully Registered!"
+				matchPass, _ := regexp.MatchString("^[a-zA-Z0-9._%+\\-]+$", passString)
+				if matchPass && len(passString) >= 8 {
+
+					var hashedPassString string
+					hashedPass, err := bcrypt.GenerateFromPassword(pass, bcrypt.DefaultCost)
+					checkError(err)
+
+					err = bcrypt.CompareHashAndPassword(hashedPass, pass)
+					checkError(err)
+
+					hashedPassString = string(hashedPass)
+					_, err = server.Db.Exec("INSERT INTO credentials (user, password) VALUES ('" + user + "', '" + hashedPassString + "')")
+					checkError(err)
+
+					response = "Successfully Registered!"
+				} else {
+
+					response = "Invalid Password Format:\nPassword must be at least 8 characters long, consisting of lowercase and uppercase letters, numbers, and special characters"
+				}
+			} else {
+				response = "Invalid Email Format"
+			}
+
 			templ, err := template.ParseFiles("./views/status.html")
 			checkError(err)
 			templ.Execute(w, response)
