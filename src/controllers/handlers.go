@@ -119,6 +119,9 @@ func (server *Server) handleOrder(w http.ResponseWriter, r *http.Request) {
 	templ, err := template.ParseFiles("./views/status.html")
 	checkError(err)
 
+	// Here should be the transaction code which performs the transaction itself
+	// but for this is out of the scope of this project
+
 	intial := os.Getenv("INITIAL_CITY")
 	goal := r.FormValue("city")
 
@@ -151,7 +154,7 @@ func (server *Server) handleCheckout(w http.ResponseWriter, r *http.Request) {
 	for _, i := range cart.CartItems {
 
 		idString := strconv.Itoa(i.ItemID)
-		result := server.Db.QueryRow("SELECT id, name, price FROM products WHERE id = " + idString)
+		result := server.Db.QueryRow("SELECT id, name, price FROM products WHERE id = ?", idString)
 		var cartItem models.CartItemDetails
 		err := result.Scan(&cartItem.ID, &cartItem.Name, &price)
 		checkError(err)
@@ -165,6 +168,8 @@ func (server *Server) handleCheckout(w http.ResponseWriter, r *http.Request) {
 	err = templ.Execute(w, cartItems)
 	checkError(err)
 }
+
+// Test handler for the path-finding algorithm
 func (server *Server) handleSearch(w http.ResponseWriter, r *http.Request) {
 
 	var g Graph
@@ -228,7 +233,7 @@ func (server *Server) handleCart(w http.ResponseWriter, r *http.Request) {
 			for _, i := range cart.CartItems {
 
 				idString := strconv.Itoa(i.ItemID)
-				result := server.Db.QueryRow("SELECT id, name FROM products WHERE id = " + idString)
+				result := server.Db.QueryRow("SELECT id, name FROM products WHERE id = ?", idString)
 				var cartItem models.CartItemDetails
 				err := result.Scan(&cartItem.ID, &cartItem.Name)
 				checkError(err)
@@ -296,9 +301,8 @@ func (server *Server) handleRegister(w http.ResponseWriter, r *http.Request) {
 					checkError(err)
 
 					hashedPassString = string(hashedPass)
+					// Validate input before sql prepared statement
 					_, err = server.Db.Exec("INSERT INTO credentials (user, password) VALUES (?, ?)", user, hashedPassString)
-					checkError(err)
-					//_, err = server.Db.Exec("INSERT INTO credentials (user, password) VALUES ('" + user + "', '" + hashedPassString + "')")
 					checkError(err)
 
 					response = "Successfully Registered!"
@@ -335,7 +339,7 @@ func (server *Server) handleLogin(w http.ResponseWriter, r *http.Request) {
 			var hashedPass string
 			var response string
 
-			result := server.Db.QueryRow("SELECT password FROM credentials WHERE user = '" + user + "'")
+			result := server.Db.QueryRow("SELECT password FROM credentials WHERE user = ?", user)
 			err := result.Scan(&hashedPass)
 			if err != nil {
 				response = "Invalid User"
@@ -390,7 +394,6 @@ func (server *Server) handleProducts(w http.ResponseWriter, r *http.Request) {
 	err = templ.Execute(w, products)
 	checkError(err)
 }
-
 func (server *Server) handleProductID(w http.ResponseWriter, r *http.Request) {
 
 	templ, err := template.ParseFiles("./views/product_details.html")
@@ -401,7 +404,7 @@ func (server *Server) handleProductID(w http.ResponseWriter, r *http.Request) {
 
 	var item models.Item
 
-	result := server.Db.QueryRow("SELECT * FROM products WHERE id = " + id)
+	result := server.Db.QueryRow("SELECT * FROM products WHERE id = ?", id)
 	err = result.Scan(&item.Id, &item.Name, &item.Price, &item.Discount, &item.Genre, &item.ReleaseDate, &item.Features, &item.HardwareType, &item.ServiceType, &item.Category)
 	checkError(err)
 
