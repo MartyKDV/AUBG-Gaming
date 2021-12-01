@@ -99,9 +99,9 @@
                 {{range $k := .}}
                     <p class="item">
                         Name: <a href="/product/{{$k.Id}}">{{$k.Name}}</a>      <br><br>
-                        Price: {{$k.Price}}                                     <br><br>
+                        Price: {{$k.Price}}                                     <br>
                         {{if (eq $k.Category "game")}}
-                            Genre: {{$k.Genre.String}}                          <br><br>
+                            Genre: {{$k.Genre.String}}                          <br>
                         {{end}} 
                     </p>
                 {{end}}
