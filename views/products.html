@@ -98,10 +98,10 @@
             <div style="display: inline-block;">
                 {{range $k := .}}
                     <p class="item">
-                        Name: <a href="/product/{{$k.Id}}">{{$k.Name}}</a>      <br>
-                        Price: {{$k.Price}}                                     <br>
+                        Name: <a href="/product/{{$k.Id}}">{{$k.Name}}</a>      <br><br>
+                        Price: {{$k.Price}}                                     <br><br>
                         {{if (eq $k.Category "game")}}
-                            Genre: {{$k.Genre.String}}                          <br>
+                            Genre: {{$k.Genre.String}}                          <br><br>
                         {{end}} 
                     </p>
                 {{end}}

@@ -104,7 +104,7 @@ func (server *Server) handleFilter(w http.ResponseWriter, r *http.Request) {
 
 	for results.Next() {
 		var p models.Item
-		err = results.Scan(&p.Id, &p.Name, &p.Price, &p.Discount, &p.Genre, &p.ReleaseDate, &p.Features, &p.HardwareType, &p.Category)
+		err = results.Scan(&p.Id, &p.Name, &p.Price, &p.Discount, &p.Genre, &p.ReleaseDate, &p.Features, &p.HardwareType, &p.ServiceType, &p.Category)
 		checkError(err)
 		log.Println(p)
 		products = append(products, p)
