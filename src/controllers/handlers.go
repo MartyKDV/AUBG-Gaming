@@ -293,19 +293,29 @@ func (server *Server) handleRegister(w http.ResponseWriter, r *http.Request) {
 				matchPass, _ := regexp.MatchString("^[a-zA-Z0-9._%+\\-]+$", passString)
 				if matchPass && len(passString) >= 8 {
 
-					var hashedPassString string
-					hashedPass, err := bcrypt.GenerateFromPassword(pass, bcrypt.DefaultCost)
-					checkError(err)
+					result := server.Db.QueryRow("SELECT password FROM credentials WHERE user = ?", user)
+					var password string
+					err := result.Scan(&password)
+					if err != nil {
+						response = "An Account With This Email Already Exists!"
+						log.Println(err.Error())
+					} else {
 
-					err = bcrypt.CompareHashAndPassword(hashedPass, pass)
-					checkError(err)
+						var hashedPassString string
+						hashedPass, err := bcrypt.GenerateFromPassword(pass, bcrypt.DefaultCost)
+						checkError(err)
 
-					hashedPassString = string(hashedPass)
-					// Validate input before sql prepared statement
-					_, err = server.Db.Exec("INSERT INTO credentials (user, password) VALUES (?, ?)", user, hashedPassString)
-					checkError(err)
+						err = bcrypt.CompareHashAndPassword(hashedPass, pass)
+						checkError(err)
 
-					response = "Successfully Registered!"
+						hashedPassString = string(hashedPass)
+						// Validate input before sql prepared statement
+						_, err = server.Db.Exec("INSERT INTO credentials (user, password) VALUES (?, ?)", user, hashedPassString)
+						checkError(err)
+
+						response = "Successfully Registered!"
+					}
+
 				} else {
 
 					response = "Invalid Password Format:\nPassword must be at least 8 characters long, consisting of lowercase and uppercase letters, numbers, and special characters"
