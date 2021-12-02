@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"main/src/models"
@@ -296,9 +297,8 @@ func (server *Server) handleRegister(w http.ResponseWriter, r *http.Request) {
 					result := server.Db.QueryRow("SELECT password FROM credentials WHERE user = ?", user)
 					var password string
 					err := result.Scan(&password)
-					if err == nil {
+					if err != sql.ErrNoRows {
 						response = "An Account With This Email Already Exists!"
-						log.Println(err.Error())
 					} else {
 
 						var hashedPassString string
